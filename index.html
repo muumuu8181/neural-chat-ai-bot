@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 NEURAL CHAT - 革新的なAIチャットボット</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="chat-container">
+        <!-- 背景アニメーション -->
+        <div class="neural-background">
+            <div class="neural-network">
+                <canvas id="neuralCanvas" width="100%" height="100%"></canvas>
+            </div>
+            <div class="particles-layer">
+                <canvas id="particlesCanvas" width="100%" height="100%"></canvas>
+            </div>
+        </div>
+
+        <!-- メインチャットインターフェース -->
+        <div class="main-interface">
+            <!-- ヘッダー -->
+            <header class="chat-header">
+                <div class="ai-avatar">
+                    <div class="avatar-circle">
+                        <div class="avatar-brain">
+                            <div class="brain-wave"></div>
+                        </div>
+                    </div>
+                    <div class="ai-status">
+                        <span class="status-indicator active"></span>
+                        <span class="status-text">オンライン</span>
+                    </div>
+                </div>
+                
+                <div class="title-section">
+                    <h1 class="app-title">
+                        <span class="neural-text">NEURAL</span>
+                        <span class="chat-text">CHAT</span>
+                    </h1>
+                    <p class="subtitle">革新的なAIチャットボット</p>
+                </div>
+
+                <div class="header-controls">
+                    <button class="control-btn" id="themeToggle" title="テーマ切替">
+                        <span class="icon">🌙</span>
+                    </button>
+                    <button class="control-btn" id="settingsBtn" title="設定">
+                        <span class="icon">⚙️</span>
+                    </button>
+                    <button class="control-btn" id="clearBtn" title="チャット履歴をクリア">
+                        <span class="icon">🗑️</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- チャットエリア -->
+            <div class="chat-area" id="chatArea">
+                <div class="messages-container" id="messagesContainer">
+                    <!-- ウェルカムメッセージ -->
+                    <div class="message ai-message welcome-message">
+                        <div class="message-avatar">
+                            <div class="ai-icon">🧠</div>
+                        </div>
+                        <div class="message-content">
+                            <div class="message-text">
+                                <h3>Neural Chatへようこそ！</h3>
+                                <p>私は最新のAI技術を搭載したチャットボットです。どんなことでもお気軽にお聞きください。</p>
+                                <div class="welcome-features">
+                                    <div class="feature-item">
+                                        <span class="feature-icon">💡</span>
+                                        <span>創造的な提案</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">📚</span>
+                                        <span>豊富な知識</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">🔄</span>
+                                        <span>文脈理解</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 入力エリア -->
+                <div class="input-section">
+                    <div class="input-container">
+                        <div class="input-wrapper">
+                            <textarea 
+                                id="messageInput" 
+                                placeholder="メッセージを入力してください..."
+                                rows="1"
+                                maxlength="2000"
+                            ></textarea>
+                            <div class="input-actions">
+                                <button class="action-btn" id="attachBtn" title="ファイル添付">
+                                    <span class="icon">📎</span>
+                                </button>
+                                <button class="action-btn" id="voiceBtn" title="音声入力">
+                                    <span class="icon">🎤</span>
+                                </button>
+                                <button class="send-btn" id="sendBtn" title="送信">
+                                    <span class="icon">🚀</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="input-footer">
+                            <div class="character-count">
+                                <span id="charCount">0</span>/2000
+                            </div>
+                            <div class="suggestions" id="suggestions">
+                                <button class="suggestion-btn">「こんにちは」と挨拶</button>
+                                <button class="suggestion-btn">今日の天気について</button>
+                                <button class="suggestion-btn">プログラミングのヘルプ</button>
+                                <button class="suggestion-btn">創作アイデアの相談</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- サイドパネル -->
+        <div class="side-panel" id="sidePanel">
+            <div class="panel-header">
+                <h3>チャット履歴</h3>
+                <button class="close-panel-btn" id="closePanelBtn">×</button>
+            </div>
+            <div class="panel-content">
+                <div class="chat-sessions" id="chatSessions">
+                    <div class="session-item active">
+                        <div class="session-info">
+                            <div class="session-title">新しいチャット</div>
+                            <div class="session-time">今</div>
+                        </div>
+                        <div class="session-preview">Neural Chatへようこそ！</div>
+                    </div>
+                </div>
+                <button class="new-chat-btn" id="newChatBtn">
+                    <span class="icon">💬</span>
+                    新しいチャット
+                </button>
+            </div>
+        </div>
+
+        <!-- 設定モーダル -->
+        <div class="modal-overlay" id="settingsModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>設定</h3>
+                    <button class="close-modal-btn" id="closeSettingsBtn">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="setting-group">
+                        <h4>AIパーソナリティ</h4>
+                        <div class="personality-options">
+                            <label class="radio-option">
+                                <input type="radio" name="personality" value="helpful" checked>
+                                <span class="radio-label">
+                                    <span class="radio-icon">🤝</span>
+                                    <span class="radio-text">親切なアシスタント</span>
+                                </span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="personality" value="creative">
+                                <span class="radio-label">
+                                    <span class="radio-icon">🎨</span>
+                                    <span class="radio-text">創造的なパートナー</span>
+                                </span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="personality" value="technical">
+                                <span class="radio-label">
+                                    <span class="radio-icon">⚙️</span>
+                                    <span class="radio-text">技術専門家</span>
+                                </span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="personality" value="casual">
+                                <span class="radio-label">
+                                    <span class="radio-icon">😊</span>
+                                    <span class="radio-text">カジュアルな友達</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <h4>レスポンス設定</h4>
+                        <div class="setting-item">
+                            <label for="responseLength">回答の長さ</label>
+                            <select id="responseLength">
+                                <option value="short">簡潔</option>
+                                <option value="medium" selected>標準</option>
+                                <option value="long">詳細</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label for="responseSpeed">回答速度</label>
+                            <input type="range" id="responseSpeed" min="1" max="5" value="3" step="1">
+                            <div class="range-labels">
+                                <span>遅い</span>
+                                <span>早い</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <h4>表示オプション</h4>
+                        <div class="setting-item checkbox-item">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="showTyping" checked>
+                                <span class="checkbox-custom"></span>
+                                タイピングアニメーション
+                            </label>
+                        </div>
+                        <div class="setting-item checkbox-item">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="showTimestamps" checked>
+                                <span class="checkbox-custom"></span>
+                                タイムスタンプ表示
+                            </label>
+                        </div>
+                        <div class="setting-item checkbox-item">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="soundEffects" checked>
+                                <span class="checkbox-custom"></span>
+                                効果音
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <h4>言語・地域</h4>
+                        <div class="setting-item">
+                            <label for="language">言語</label>
+                            <select id="language">
+                                <option value="ja" selected>日本語</option>
+                                <option value="en">English</option>
+                                <option value="ko">한국어</option>
+                                <option value="zh">中文</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secondary" id="resetSettingsBtn">リセット</button>
+                    <button class="btn-primary" id="saveSettingsBtn">保存</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 音声入力モーダル -->
+        <div class="modal-overlay" id="voiceModal">
+            <div class="modal-content voice-modal">
+                <div class="modal-header">
+                    <h3>音声入力</h3>
+                    <button class="close-modal-btn" id="closeVoiceBtn">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="voice-visualizer">
+                        <div class="voice-circle">
+                            <div class="voice-wave"></div>
+                            <span class="voice-icon">🎤</span>
+                        </div>
+                        <div class="voice-status" id="voiceStatus">マイクボタンを押して話してください</div>
+                    </div>
+                    <div class="voice-controls">
+                        <button class="voice-control-btn" id="startVoiceBtn">
+                            <span class="icon">🎤</span>
+                            録音開始
+                        </button>
+                        <button class="voice-control-btn" id="stopVoiceBtn" disabled>
+                            <span class="icon">⏹️</span>
+                            録音停止
+                        </button>
+                    </div>
+                    <div class="voice-transcript" id="voiceTranscript"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ローディングインジケーター -->
+        <div class="loading-indicator" id="loadingIndicator">
+            <div class="thinking-animation">
+                <div class="thinking-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="thinking-text">考え中...</div>
+            </div>
+        </div>
+
+        <!-- 通知システム -->
+        <div class="notification-container" id="notificationContainer"></div>
+
+        <!-- サウンドエフェクト -->
+        <div id="audioContainer" style="display: none;"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
